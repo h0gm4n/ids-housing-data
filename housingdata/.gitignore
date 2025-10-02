@@ -12,7 +12,10 @@ dist
 dist-ssr
 *.local
 src/backend/.venv
-
+src/backend/.venv
+src/backend/venv
+src/backend/*.pkl
+venv
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
