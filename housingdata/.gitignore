@@ -25,4 +25,5 @@ venv
 *.ntvs*
 *.njsproj
 *.sln
+*.parquet
 *.sw?
