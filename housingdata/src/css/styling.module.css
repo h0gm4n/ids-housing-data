@@ -12,12 +12,15 @@
 .resultsStylePrice {
     background-image: linear-gradient(to bottom, lightblue, white);
     display: inline-block;
-    margin-left: 25%;
+    margin-left: 25.6%;
     margin-right: 5%;
     margin-top: 5%;
     width: 20%;
     height: 20%;
     text-align: center;
+    border-radius: 10px;
+    outline-width: 3px;
+    outline-style: solid;
 }
 
 .resultsStyleLivingSpace {
@@ -27,8 +30,16 @@
     width: 20%;
     height: 20%;
     text-align: center;
+    border-radius: 10px;
+    outline-width: 3px;
+    outline-style: solid;
 }
 
 .bold {
     font-weight: bold;
+}
+
+.validationError {
+    text-align: center;
+    color: red;
 }

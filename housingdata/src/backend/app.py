@@ -63,7 +63,10 @@ def test_function():
     link = make_link(closest_house_id) if closest_house_id else None
     
     result = {"predicted_price": predicted_price,
-              "predicted_living_space": predicted_living_space}
+              "predicted_living_space": predicted_living_space,
+              "given_postal_code": postal_code,
+              "given_living_space": living_space,
+              "given_apartment_price": apartment_price}
     
     return jsonify(result)
 
