@@ -13,7 +13,7 @@ def linear_model(x, a, b):
 def strip(string):
     return string.lstrip('0')
 #df = pd.read_csv('housingdata/src/backend/american_housing_data.csv')
-df = pd.read_parquet('random-forest/CleanData.parquet')
+df = pd.read_parquet('CleanData.parquet')
 
 df = df[df['City'] == 'Helsinki']
 
@@ -83,7 +83,7 @@ model_data = {
     'model': model,
     'normalization_params': normalization_params
 }
-joblib.dump(model_data, 'housingdata/src/backend/random_forest_model.pkl')
+joblib.dump(model_data, 'random_forest_model.pkl')
 print("Model and normalization parameters saved to 'random_forest_model.pkl'")
 
 
@@ -107,7 +107,7 @@ model_data_la = {
     'model': model_living_area,
     'normalization_params_la': normalization_params
 }
-joblib.dump(model_living_area, 'housingdata/src/backend/random_forest_model_living_area.pkl')
+joblib.dump(model_living_area, 'random_forest_model_living_area.pkl')
 
 #predict the price of a house with 2000 sqft, 3 beds, 2 baths, zip code 10036
 # Save the trained model to a file
@@ -145,7 +145,7 @@ def get_deals(threshold=1.5):
     houses_sorted = houses_above_actual.sort_values(by='Deviation', ascending=False)
     #row numbers for top 10 deals
     rows = houses_sorted.head(10).index
-    ids = df.loc[rows, 'Id']
+    #ids = df.loc[rows, 'Id']
     print(houses_sorted.head())
     return houses_sorted[['Price', 'Size', 'PostCode', 'Deviation']]
 

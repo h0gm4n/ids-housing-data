@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import pandas as pd
@@ -6,9 +6,9 @@ app = Flask(__name__)
 CORS(app)
 
 
-df = pd.read_parquet('random-forest/CleanData.parquet')
-model_data = joblib.load('housingdata/src/backend/random_forest_model.pkl')
-model_data_la = joblib.load('housingdata/src/backend/random_forest_model_living_area.pkl')
+df = pd.read_parquet('CleanData.parquet')
+model_data = joblib.load('random_forest_model.pkl')
+model_data_la = joblib.load('random_forest_model_living_area.pkl')
 print(model_data)
 model = model_data['model']
 
@@ -61,7 +61,11 @@ def test_function():
     #that is most similar to the predicted house from the users input
     closest_house_id = get_closest_house(predicted_price, postal_code, living_space)
     link = make_link(closest_house_id) if closest_house_id else None
-    return 'Data received!'
+    
+    result = {"predicted_price": predicted_price,
+              "predicted_living_space": predicted_living_space}
+    
+    return jsonify(result)
 
 def predict_price(postal_code, living_space):
 
@@ -98,16 +102,15 @@ def get_typical_house(postal_code, price):
 def get_closest_house(price, postal_code, living_space):
     # find the closest house in the dataset to the given parameters
     df_area = df[df['PostCode'].astype(str).str.startswith(str(postal_code))]
-    df_area['PriceDiff'] = (df_area['Price'] - price).abs()
-    df_area['LivingSpaceDiff'] = (df_area['Size'] - living_space).abs()
+    df_area['PriceDiff'] = (df_area['Price'] - float(price)).abs()
+    df_area['LivingSpaceDiff'] = (df_area['Size'] - float(living_space)).abs()
     df_area['TotalDiff'] = df_area['PriceDiff'] + df_area['LivingSpaceDiff']
     closest_house = df_area.loc[df_area['TotalDiff'].idxmin()]
-
+    #print(closest_house)
     #placeholder
-    # house_id = closest_house['ID']
-    # print(f"House ID: {house_id}")
+    #house_id = closest_house['ID']
+    #print(f"House ID: {house_id}")
     house_id = None
-
     return house_id
 
 

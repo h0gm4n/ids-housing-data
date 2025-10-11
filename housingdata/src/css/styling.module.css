@@ -1,0 +1,34 @@
+.headerStyle {
+    color: DodgerBlue;
+    margin-left: 38%;
+    margin-top: 5%;
+}
+
+.apartmentFormStyle {
+    margin-right: 4%;
+    text-align: center;
+}
+
+.resultsStylePrice {
+    background-image: linear-gradient(to bottom, lightblue, white);
+    display: inline-block;
+    margin-left: 25%;
+    margin-right: 5%;
+    margin-top: 5%;
+    width: 20%;
+    height: 20%;
+    text-align: center;
+}
+
+.resultsStyleLivingSpace {
+    background-image: linear-gradient(to bottom, lightgreen, white);
+    background-color: lightgreen;
+    display: inline-block;
+    width: 20%;
+    height: 20%;
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
