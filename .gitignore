@@ -20,3 +20,9 @@ python-backend/__pycache__/
 # OS files
 .DS_Store
 Thumbs.db
+# Data files
+*.csv
+*.parquet
+*.ndjson
+#output pictures
+*.png

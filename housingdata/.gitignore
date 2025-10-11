@@ -27,3 +27,9 @@ venv
 *.sln
 *.parquet
 *.sw?
+# Data files
+*.csv
+*.parquet
+*.ndjson
+#output pictures
+*.png

@@ -10,12 +10,17 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 def linear_model(x, a, b):
     return a * x + b
-
+def strip(string):
+    return string.lstrip('0')
 #df = pd.read_csv('housingdata/src/backend/american_housing_data.csv')
 df = pd.read_parquet('random-forest/CleanData.parquet')
 
 df = df[df['City'] == 'Helsinki']
 
+df = df[df['Price'] > 70000]  # Remove entries with price less than 70,000g
+df['PostCodeStripped'] = df['PostCode'].str.lstrip('0').fillna(value='0')
+df['PostCodeStripped'] = pd.to_numeric(df['PostCodeStripped'], errors='coerce').fillna(0).astype(int)
+#df = df[df['PostCodeStripped'] < 150]  # Remove entries with
 post_code = df['PostCode']
 living_area = df['Size']
 price = df['Price']
@@ -24,11 +29,11 @@ price = df['Price']
 # Normalize living_area to between 0 and 1
 living_area_min = living_area.min()
 living_area_max = living_area.max()
-living_area = (living_area - living_area_min) / (living_area_max - living_area_min)
+living_area_norm = (living_area - living_area_min) / (living_area_max - living_area_min)
 
 price_min = price.min()
 price_max = price.max()
-price = (price - price_min) / (price_max - price_min)
+price_norm = (price - price_min) / (price_max - price_min)
 
 # Save normalization parameters
 normalization_params = {
@@ -42,8 +47,8 @@ print(f'Price min: {price_min}, max: {price_max}')
 
 
 correlation_vars = pd.DataFrame({
-    'Price': price,
-    'Living Space': living_area,
+    'Price': price_norm,
+    'Living Space': living_area_norm,
     'PostCode': post_code,
 })
 
@@ -108,18 +113,55 @@ joblib.dump(model_living_area, 'housingdata/src/backend/random_forest_model_livi
 # Save the trained model to a file
 # Save the trained model and normalization parameters to a file
 
-plt.scatter(price, living_area, color='blue', label='Data points')
-plt.scatter(price, model.predict(X), color='red', label='Random Forest Predictions', alpha=0.5)
-plt.xlabel('Normalized Price')
-plt.ylabel('Normalized Living Area')
-plt.title('Random Forest Regression: Price vs Living Area')
-plt.legend()
-plt.show()
 
-plt.scatter(price, living_area, color='blue', label='Data points')
-plt.scatter(price, model_living_area.predict(X_la), color='green', label='Living Area Predictions', alpha=0.5)
-plt.xlabel('Normalized Price')
-plt.ylabel('Normalized Living Area')
-plt.title('Random Forest Regression: Price vs Living Area')
+plt.scatter(price, model.predict(X)* (price_max - price_min) + price_min, color='red', label='Random Forest Predictions', alpha=0.5, facecolors='none', edgecolors='g', s=3)
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
 plt.legend()
-plt.show()
+plt.savefig('random_forest_price_vs_price.png', dpi=300)
+plt.clf()
+
+plt.scatter(living_area, model_living_area.predict(X_la)* (living_area_max - living_area_min) + living_area_min, color='red', label='Random Forest Predictions', alpha=0.5, facecolors='none', edgecolors='g', s=3)
+plt.xlabel('Actual Living Area')
+plt.ylabel('Predicted Living Area')
+plt.legend()
+plt.title('Random Forest Regression: Living Area vs Price')
+plt.legend()
+plt.savefig('random_forest_living_area.png', dpi=300)
+
+# Get all houses where predicted price > actual price
+predicted_prices = model.predict(X) * (price_max - price_min) + price_min
+actual_prices = price
+
+above_actual_mask = predicted_prices > actual_prices * 1.5
+houses_above_actual = df[above_actual_mask]
+
+
+
+def get_deals(threshold=1.5):
+    above_actual_mask = predicted_prices > actual_prices * threshold
+    houses_above_actual = df[above_actual_mask]
+    houses_above_actual['Deviation'] = predicted_prices[above_actual_mask] - actual_prices[above_actual_mask]
+    houses_sorted = houses_above_actual.sort_values(by='Deviation', ascending=False)
+    #row numbers for top 10 deals
+    rows = houses_sorted.head(10).index
+    ids = df.loc[rows, 'Id']
+    print(houses_sorted.head())
+    return houses_sorted[['Price', 'Size', 'PostCode', 'Deviation']]
+
+def make_link(id):
+    return f'https://www.etuovi.com/kohde/{id}'
+
+get_deals()
+
+
+#{"addressLine2": "Taka-Töölö Helsinki",
+#  "location": "Mechelininkatu 34b Taka-Töölö Helsinki",
+#  "constructionFinishedYear": 2001,
+#  "searchPrice": 924000,
+#  "price": null,
+#  "roomCount": "THREE_ROOMS",
+#  "area": 109,
+#  "totalArea": 109,
+#  "id": 2340469,
+#  "friendlyId": "37599385"}

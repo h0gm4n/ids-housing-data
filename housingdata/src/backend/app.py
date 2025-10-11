@@ -57,6 +57,10 @@ def test_function():
     print(f"Postal Code: {postal_code}, Living Space: {living_space}")
     print(f"Predicted Living Space for given price: {predicted_living_space}")
 
+    #use these functions to get the house ID and link to the house 
+    #that is most similar to the predicted house from the users input
+    closest_house_id = get_closest_house(predicted_price, postal_code, living_space)
+    link = make_link(closest_house_id) if closest_house_id else None
     return 'Data received!'
 
 def predict_price(postal_code, living_space):
@@ -90,6 +94,26 @@ def get_typical_house(postal_code, price):
     print(f"Typical house in area for given price: Living Space: {living_space}, Median Price: {median_price}")
 
     return
+
+def get_closest_house(price, postal_code, living_space):
+    # find the closest house in the dataset to the given parameters
+    df_area = df[df['PostCode'].astype(str).str.startswith(str(postal_code))]
+    df_area['PriceDiff'] = (df_area['Price'] - price).abs()
+    df_area['LivingSpaceDiff'] = (df_area['Size'] - living_space).abs()
+    df_area['TotalDiff'] = df_area['PriceDiff'] + df_area['LivingSpaceDiff']
+    closest_house = df_area.loc[df_area['TotalDiff'].idxmin()]
+
+    #placeholder
+    # house_id = closest_house['ID']
+    # print(f"House ID: {house_id}")
+    house_id = None
+
+    return house_id
+
+
+
+def make_link(id):
+    return f'https://www.etuovi.com/kohde/{id}'
 
 if __name__ == '__main__':
     app.run(debug=True)
