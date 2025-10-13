@@ -12,7 +12,7 @@ def linear_model(x, a, b):
     return a * x + b
 def strip(string):
     return string.lstrip('0')
-#df = pd.read_csv('housingdata/src/backend/american_housing_data.csv')
+
 df = pd.read_parquet('etuovi_vFINAL.parquet')
 
 print(df.columns)

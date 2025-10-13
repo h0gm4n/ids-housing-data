@@ -1,7 +1,7 @@
 .headerStyle {
     color: DodgerBlue;
     margin-left: 38%;
-    margin-top: 5%;
+    margin-top: 1%;
 }
 
 .apartmentFormStyle {
@@ -14,7 +14,7 @@
     display: inline-block;
     margin-left: 25.6%;
     margin-right: 5%;
-    margin-top: 5%;
+    margin-top: 2%;
     width: 20%;
     height: 20%;
     text-align: center;
@@ -35,6 +35,13 @@
     outline-style: solid;
 }
 
+.apartmentLinkStyle {
+    text-align: center;
+    width: 20%;
+    height: 20%;
+    margin-left: 39%;
+}
+
 .bold {
     font-weight: bold;
 }
@@ -42,4 +49,47 @@
 .validationError {
     text-align: center;
     color: red;
+}
+
+.button,
+.linkButton {
+    background-color: blue;
+    border-radius: 10px;
+    color: white;
+    padding: 5px 15px;
+    text-decoration: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button {
+    margin-top: 20px;
+}
+
+.linkButton {
+    margin-left: 38%;
+}
+
+.resultsStylePrice,
+.resultsStyleLivingSpace,
+.apartmentLinkStyle {
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 1s;
+}
+
+.apartmentLinkStyle {
+    margin-left: 38.5%;
+}
+
+@keyframes fadeInOpacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

@@ -4,9 +4,9 @@ import styles from './css/styling.module.css'
 
 const App = () => {
 
-  const [postalCode, setPostalCode] = useState('00560')
-  const [livingSpace, setLivingSpace] = useState('90')
-  const [apartmentPrice, setApartmentPrice] = useState('500000')
+  const [postalCode, setPostalCode] = useState('')
+  const [livingSpace, setLivingSpace] = useState('')
+  const [apartmentPrice, setApartmentPrice] = useState('')
   const [predictedPrice, setPredictedPrice] = useState('')
   const [predictedLivingSpace, setPredictedLivingSpace] = useState('')
   const [showResultsPrice, setShowResultsPrice] = useState(false)
@@ -17,6 +17,8 @@ const App = () => {
   const [showPostalCodeError, setShowPostalCodeError] = useState(false)
   const [showLivingSpaceError, setShowLivingSpaceError] = useState(false)
   const [showApartmentPriceError, setShowApartmentPriceError] = useState(false)
+  const [apartmentLink, setApartmentLink] = useState('')
+  const [showLinkToApartment, setShowLinkToApartment] = useState(false)
   const postalCodeText = "In (or near) postal code area"
   const postalCodeError = "Postal code should be 5 characters long and consist of numbers only!"
   const livingSpaceError = "Living space should be an integer or decimal with separator '.'"
@@ -33,10 +35,6 @@ const App = () => {
   const handleApartmentPriceChange = (event) => {
     setApartmentPrice(event.target.value)
   }
-
-  /*
-  Get values from forms and send to backend
-  */
 
 
   /*
@@ -69,16 +67,17 @@ const App = () => {
       setShowApartmentPriceError(true)
     }
     if (postal_code_ok == true && living_space_ok == true && apartment_price_ok == true) {
-      console.log("OK!")
       return true
     }
     return false
   }
 
+  /*
+  Get values from form and send to backend if validated
+  */
   async function getApartments(event) {
     event.preventDefault()
     const validated = validateValues()
-    console.log(validated)
     if (validated == true) {
       try {
         const response = await fetch('http://127.0.0.1:5000/', {
@@ -98,17 +97,23 @@ const App = () => {
         setGivenPostalCode(data['given_postal_code'])
         setGivenLivingSpace(data['given_living_space'])
         setGivenApartmentPrice(data['given_apartment_price'])
+        setApartmentLink(data['apartment_link'])
       } catch (error) {
         console.error("Error sending data:", error);
       }
       setShowResultsPrice(true)
       setShowResultsLivingSpace(true)
+      setShowLinkToApartment(true)
     } else {
       setShowResultsPrice(false)
       setShowResultsLivingSpace(false)
+      setShowLinkToApartment(false)
     }
   }
 
+  /*
+  The box showing the predicted price for apartment
+  */
   const resultsBoxPrice = () => {
     return (
       <div className={styles.resultsStylePrice}>
@@ -123,6 +128,9 @@ const App = () => {
     )
   }
 
+  /*
+  The box showing the predicted living space for price
+  */
   const resultsBoxLivingSpace = () => {
     return (
       <div className={styles.resultsStyleLivingSpace}>
@@ -137,6 +145,27 @@ const App = () => {
     )
   }
 
+
+  async function openLink(event) {
+    event.preventDefault()
+    window.open(apartmentLink, '_blank').focus()
+  }
+
+  /*
+  Lets user open link to recommended apartment 
+  */
+  const apartmentLinkBox = () => {
+    return (
+      <div className={styles.apartmentLinkStyle}>
+        <h2>We recommend taking a look at this apartment:</h2>
+        <button className={styles.button} onClick={openLink}>Visit etuovi.com</button>
+      </div>
+    )
+  }
+
+  /*
+  Form for entering the properties of the apartment
+  */
   const apartmentValueForm = () => {
     return (
       <div>
@@ -147,7 +176,7 @@ const App = () => {
           <input value={livingSpace} onChange={handleLivingSpaceChange} /><br />
           Apartment Price:<br />
           <input value={apartmentPrice} onChange={handleApartmentPriceChange} /><br />
-          <button type="submit">Submit</button>
+          <button className={styles.button} type="submit">Submit</button>
         </form>
       </div>
     )
@@ -162,6 +191,7 @@ const App = () => {
       {apartmentValueForm()}
       {showResultsPrice ? resultsBoxPrice() : null}
       {showResultsLivingSpace ? resultsBoxLivingSpace() : null}
+      {showLinkToApartment ? apartmentLinkBox() : null}
     </div>
   )
 }

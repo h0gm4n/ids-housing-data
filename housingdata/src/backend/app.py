@@ -6,7 +6,8 @@ app = Flask(__name__)
 CORS(app)
 
 
-df = pd.read_parquet('CleanData.parquet')
+df = pd.read_parquet('etuovi_vFINAL.parquet')
+df = df.rename(columns={'postcode': 'PostCode', 'searchPrice': 'Price', 'area': 'Size'})
 model_data = joblib.load('random_forest_model.pkl')
 model_data_la = joblib.load('random_forest_model_living_area.pkl')
 print(model_data)
@@ -61,12 +62,14 @@ def test_function():
     #that is most similar to the predicted house from the users input
     closest_house_id = get_closest_house(predicted_price, postal_code, living_space)
     link = make_link(closest_house_id) if closest_house_id else None
-    
+    print(link)
+
     result = {"predicted_price": predicted_price,
               "predicted_living_space": predicted_living_space,
               "given_postal_code": postal_code,
               "given_living_space": living_space,
-              "given_apartment_price": apartment_price}
+              "given_apartment_price": apartment_price,
+              "apartment_link": link}
     
     return jsonify(result)
 
@@ -110,10 +113,8 @@ def get_closest_house(price, postal_code, living_space):
     df_area['TotalDiff'] = df_area['PriceDiff'] + df_area['LivingSpaceDiff']
     closest_house = df_area.loc[df_area['TotalDiff'].idxmin()]
     #print(closest_house)
-    #placeholder
-    #house_id = closest_house['ID']
-    #print(f"House ID: {house_id}")
-    house_id = None
+    house_id = closest_house['friendlyId']
+    print(f"House ID: {house_id}")
     return house_id
 
 
