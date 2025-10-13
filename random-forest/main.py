@@ -13,17 +13,19 @@ def linear_model(x, a, b):
 def strip(string):
     return string.lstrip('0')
 #df = pd.read_csv('housingdata/src/backend/american_housing_data.csv')
-df = pd.read_parquet('CleanData.parquet')
+df = pd.read_parquet('etuovi_vFINAL.parquet')
 
-df = df[df['City'] == 'Helsinki']
+print(df.columns)
 
-df = df[df['Price'] > 70000]  # Remove entries with price less than 70,000g
-df['PostCodeStripped'] = df['PostCode'].str.lstrip('0').fillna(value='0')
+df = df[df['city'] == 'Helsinki']
+
+df = df[df['searchPrice'] > 70000]  # Remove entries with price less than 70,000g
+df['PostCodeStripped'] = df['postcode'].str.lstrip('0').fillna(value='0')
 df['PostCodeStripped'] = pd.to_numeric(df['PostCodeStripped'], errors='coerce').fillna(0).astype(int)
 #df = df[df['PostCodeStripped'] < 150]  # Remove entries with
-post_code = df['PostCode']
-living_area = df['Size']
-price = df['Price']
+post_code = df['postcode']
+living_area = df['area']
+price = df['searchPrice']
 
 
 # Normalize living_area to between 0 and 1
@@ -147,7 +149,7 @@ def get_deals(threshold=1.5):
     rows = houses_sorted.head(10).index
     #ids = df.loc[rows, 'Id']
     print(houses_sorted.head())
-    return houses_sorted[['Price', 'Size', 'PostCode', 'Deviation']]
+    return houses_sorted[['searchPrice', 'area', 'postcode', 'Deviation']]
 
 def make_link(id):
     return f'https://www.etuovi.com/kohde/{id}'
