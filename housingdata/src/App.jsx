@@ -155,12 +155,22 @@ const App = () => {
   Lets user open link to recommended apartment 
   */
   const apartmentLinkBox = () => {
-    return (
-      <div className={styles.apartmentLinkStyle}>
-        <h2>We recommend taking a look at this apartment:</h2>
-        <button className={styles.button} onClick={openLink}>Visit etuovi.com</button>
-      </div>
-    )
+    console.log(predictedPrice)
+    console.log(apartmentPrice)
+    if (predictedPrice < apartmentPrice) {
+      return (
+        <div className={styles.apartmentLinkStyle}>
+          <h2>We recommend taking a look at this apartment:</h2>
+          <button className={styles.button} onClick={openLink}>Visit etuovi.com</button>
+        </div>
+      )
+    } else {
+      return (
+        <div className={styles.apartmentLinkStyle}>
+          <h2>This should be a good deal!</h2>
+        </div>
+      )
+    }
   }
 
   /*
