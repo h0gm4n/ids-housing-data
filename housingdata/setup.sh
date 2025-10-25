@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Installing frontend (npm) dependencies..."
-npm install
+npm install --production
 
 echo "Installing backend (Python) dependencies..."
 pip install -r requirements.txt
