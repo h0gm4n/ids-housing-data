@@ -13,7 +13,7 @@ model_data_la = joblib.load('src/backend/random_forest_model_living_area.pkl')
 print(model_data)
 model = model_data['model']
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def test_function():
     data = request.get_json()
     postal_code = data.get('postalCode')
