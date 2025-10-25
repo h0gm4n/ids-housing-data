@@ -5,8 +5,6 @@ npm install
 
 echo "Installing backend (Python) dependencies..."
 cd src/backend
-python3 -m venv .venv
-source .venv/bin/activate
 pip install flask flask-cors
 
 echo "Setup complete! You can now run the servers."
