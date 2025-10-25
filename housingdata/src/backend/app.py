@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+import os
 from flask_cors import CORS
 import joblib
 import pandas as pd
-app = Flask(__name__)
+app = Flask(__name__, static_folder=".../dist", static_url_path="/")
 CORS(app)
 
 
@@ -13,7 +14,11 @@ model_data_la = joblib.load('src/backend/random_forest_model_living_area.pkl')
 print(model_data)
 model = model_data['model']
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "index.html")
+
+@app.route('/', methods=['POST'])
 def test_function():
     data = request.get_json()
     postal_code = data.get('postalCode')
