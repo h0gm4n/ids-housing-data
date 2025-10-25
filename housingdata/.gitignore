@@ -14,7 +14,6 @@ dist-ssr
 src/backend/.venv
 src/backend/.venv
 src/backend/venv
-src/backend/*.pkl
 venv
 # Editor directories and files
 .vscode/*
@@ -25,11 +24,9 @@ venv
 *.ntvs*
 *.njsproj
 *.sln
-*.parquet
 *.sw?
 # Data files
 *.csv
-*.parquet
 *.ndjson
 #output pictures
 *.png

@@ -6,10 +6,10 @@ app = Flask(__name__)
 CORS(app)
 
 
-df = pd.read_parquet('etuovi_vFINAL.parquet')
+df = pd.read_parquet('src/backend/etuovi_vFINAL.parquet')
 df = df.rename(columns={'postcode': 'PostCode', 'searchPrice': 'Price', 'area': 'Size'})
-model_data = joblib.load('random_forest_model.pkl')
-model_data_la = joblib.load('random_forest_model_living_area.pkl')
+model_data = joblib.load('src/backend/random_forest_model.pkl')
+model_data_la = joblib.load('src/backend/random_forest_model_living_area.pkl')
 print(model_data)
 model = model_data['model']
 

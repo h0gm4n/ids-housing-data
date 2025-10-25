@@ -22,7 +22,6 @@ python-backend/__pycache__/
 Thumbs.db
 # Data files
 *.csv
-*.parquet
 *.ndjson
 #output pictures
 *.png

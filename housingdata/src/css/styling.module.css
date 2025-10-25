@@ -1,18 +1,17 @@
 .headerStyle {
     color: DodgerBlue;
-    margin-left: 38%;
     margin-top: 1%;
+    text-align: center;
 }
 
 .apartmentFormStyle {
-    margin-right: 4%;
     text-align: center;
 }
 
 .resultsStylePrice {
     background-image: linear-gradient(to bottom, lightblue, white);
     display: inline-block;
-    margin-left: 25.6%;
+    margin-left: 27.7%;
     margin-right: 5%;
     margin-top: 2%;
     width: 20%;
@@ -81,7 +80,7 @@
 }
 
 .apartmentLinkStyle {
-    margin-left: 38.5%;
+    margin-left: 40.2%;
 }
 
 @keyframes fadeInOpacity {
