@@ -3,9 +3,9 @@ import os
 from flask_cors import CORS
 import joblib
 import pandas as pd
-app = Flask(__name__, static_folder=".../dist", static_url_path="/")
+BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist')
+app = Flask(__name__, static_folder=BUILD_DIR, static_url_path="/")
 CORS(app)
-
 
 df = pd.read_parquet('src/backend/etuovi_vFINAL.parquet')
 df = df.rename(columns={'postcode': 'PostCode', 'searchPrice': 'Price', 'area': 'Size'})
@@ -14,11 +14,11 @@ model_data_la = joblib.load('src/backend/random_forest_model_living_area.pkl')
 print(model_data)
 model = model_data['model']
 
-@app.route("/")
-def index():
-    return send_from_directory(app.static_folder, "index.html")
+@app.route('/')
+def serve_react_app():
+    return send_from_directory(app.static_folder, 'index.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/api/predict', methods=['POST'])
 def test_function():
     data = request.get_json()
     postal_code = data.get('postalCode')
