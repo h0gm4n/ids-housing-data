@@ -37,15 +37,6 @@ def test_function():
     living_space_norm = (float(living_space) - living_area_min) / (living_area_max - living_area_min)
     apartment_price_norm = (float(apartment_price) - price_min) / (price_max - price_min)
 
-    # if int(postal_code) not in zip_code.values:
-    #     # Find the nearest postal code in the dataset
-    #     postal_codes = zip_code.astype(int)
-    #     nearest_postal_code = postal_codes.iloc[(postal_codes - int(postal_code)).abs().argsort()[:1]].values[0]
-    #     postal_code = str(nearest_postal_code)
-    #     print(f"Using nearest postal code: {postal_code}")
-  
-    # postal_code = str(postal_code)[:4]  # Use only the first 4 digits
-
 
     predicted_price = predict_price(postal_code, living_space_norm)
     predicted_living_space = predict_living_space(postal_code, float(apartment_price_norm))
@@ -117,7 +108,6 @@ def get_closest_house(price, postal_code, living_space):
     df_area['LivingSpaceDiff'] = (df_area['Size'] - float(living_space)).abs()
     df_area['TotalDiff'] = df_area['PriceDiff'] + df_area['LivingSpaceDiff']
     closest_house = df_area.loc[df_area['TotalDiff'].idxmin()]
-    #print(closest_house)
     house_id = closest_house['friendlyId']
     print(f"House ID: {house_id}")
     return house_id

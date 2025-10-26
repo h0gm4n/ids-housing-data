@@ -155,9 +155,7 @@ const App = () => {
   Lets user open link to recommended apartment 
   */
   const apartmentLinkBox = () => {
-    console.log(predictedPrice)
-    console.log(apartmentPrice)
-    if (predictedPrice < apartmentPrice) {
+    if (predictedPrice < givenApartmentPrice) {
       return (
         <div className={styles.apartmentLinkStyle}>
           <h2>We recommend taking a look at this apartment:</h2>
